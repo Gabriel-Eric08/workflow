@@ -1,6 +1,7 @@
 from flask import Flask
 from config_db import db, Config
 from routes.cargo import cargo_bp # Importa o blueprint
+from routes.funcionario import funcionario_bp
 
 def create_app():
     app = Flask(__name__)
@@ -8,6 +9,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(cargo_bp, url_prefix='/cargo')
+    app.register_blueprint(funcionario_bp, url_prefix='/funcionario')
     
     return app
 
