@@ -1,15 +1,15 @@
 from flask import Flask
 from config_db import db, Config
-
-# Aqui você importará apenas os Blueprints (Rotas/Controllers)
-# from controllers.processo_controller import processo_bp 
+from routes.cargo import cargo_bp # Importa o blueprint
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
-    with app.app_context():
-        return app
+
+    app.register_blueprint(cargo_bp, url_prefix='/cargo')
+    
+    return app
 
 if __name__ == '__main__':
     app = create_app()

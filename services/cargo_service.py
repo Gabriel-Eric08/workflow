@@ -2,7 +2,7 @@ from repositories.cargo_repository import CargoRepository, db
 
 class CargoService:
     def __init__(self):
-        self.repo = CargoRepository
+        self.repo = CargoRepository()
     
     def create_cargo(self, nome, descricao):
         if not nome or not descricao:
