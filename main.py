@@ -4,6 +4,7 @@ from routes.cargo import cargo_bp # Importa o blueprint
 from routes.funcionario import funcionario_bp
 from routes.etapa_definicao import etapa_definicao_bp
 from routes.modelo_processo import modelo_processo_bp
+from routes.instancia_processo import instancia_processo_bp
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +15,7 @@ def create_app():
     app.register_blueprint(funcionario_bp, url_prefix='/funcionario')
     app.register_blueprint(etapa_definicao_bp, url_prefix='/etapa/definicao')
     app.register_blueprint(modelo_processo_bp, url_prefix='/modelo/processo')
+    app.register_blueprint(instancia_processo_bp, url_prefix='/instancia/processo')
     
     return app
 
