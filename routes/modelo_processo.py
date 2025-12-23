@@ -36,16 +36,15 @@ def get_all():
     try:
         modelos = modelo_processo_service.get_all()
         
-        # Converte cada objeto Cargo para dicionário
+        # Converte para dicionário
         modelos_list = [modelo.to_dict() for modelo in modelos]
         
         return jsonify({
             "sucess": True,
-            "cargos": modelos_list
+            "modelos": modelos_list  # <--- CORRIGIDO: O front-end espera "modelos"
         }), 200
         
     except Exception as e:
-        # Só retorna 500 se realmente der um erro de servidor (exceção)
         print(f"Erro na rota: {e}")
         return jsonify({
             "sucess": False,

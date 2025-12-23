@@ -61,9 +61,9 @@ class ModeloProcesso(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "name": self.nome_processo,      # Front-end espera 'name'
-            "key": self.codigo_processo,     # Front-end espera 'key'
-            "description": self.descricao    # Front-end espera 'description'
+            "nome_processo": self.nome_processo,    # Vamos usar as chaves em português
+            "codigo_processo": self.codigo_processo, # para bater com sua rota register
+            "descricao": self.descricao
         }
 
 
