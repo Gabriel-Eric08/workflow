@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secretaria da Mulher - PE | Workflow</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           VARIÁVEIS DE CORES & TEMA
+           ========================================= */
+        :root {
+            /* Identidade Visual - Roxo e Branco */
+            --primary-color: #6f42c1;       /* Roxo Principal */
+            --primary-hover: #59359a;       /* Roxo Escuro para hover */
+            --accent-color: #a673e8;        /* Roxo Claro */
+            --bg-body: #f8f9fa;             /* Fundo Claro */
+            --text-color: #333333;          /* Texto Escuro */
+            --card-bg: #ffffff;             /* Fundo dos Cards */
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --navbar-text: #333;
+            --hero-gradient: linear-gradient(135deg, #6f42c1 0%, #a673e8 100%);
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* TEMA ESCURO (Dark Mode) */
+        [data-theme="dark"] {
+            --primary-color: #9d6ce0;
+            --primary-hover: #b589f0;
+            --bg-body: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --navbar-bg: rgba(30, 30, 30, 0.95);
+            --navbar-text: #f8f9fa;
+            --hero-gradient: linear-gradient(135deg, #381a6b 0%, #2a1b3d 100%);
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================
+           ESTILOS GERAIS
+           ========================================= */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; }
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+        .navbar {
+            background-color: var(--navbar-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--navbar-text) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+
+        /* Botão Dark Mode */
+        .btn-theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--navbar-text);
+            color: var(--navbar-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-theme-toggle:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: rotate(15deg);
+        }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero-section {
+            background: var(--hero-gradient);
+            min-height: 85vh;
+            padding-top: 80px; /* Espaço para navbar fixa */
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* Ondas SVG no rodapé do Hero */
+        .wave-container {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: 1;
+        }
+
+        .wave-container svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .wave-fill {
+            fill: var(--bg-body);
+            transition: fill 0.3s ease;
+        }
+
+        /* =========================================
+           CARDS / DASHBOARD PREVIEW
+           ========================================= */
+        .card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: rgba(111, 66, 193, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .card:hover .icon-box {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .card-text {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* =========================================
+           ANIMAÇÕES
+           ========================================= */
+        .animate-up {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ajustes Mobile */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .hero-section { min-height: auto; padding-bottom: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-scale-balanced me-2"></i>
+                Sec. Mulher PE
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(0.5);"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Administração
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="cadastro_cargo.html">Novo Cargo</a></li>
+                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Novo Funcionário</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Processos
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="cadastro_modelo.html">Novo Modelo</a></li>
+                            <li><a class="dropdown-item" href="cadastro_etapa.html">Definir Etapas</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="nova_instancia.html"><strong>Iniciar Processo</strong></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Relatórios</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <button class="btn-theme-toggle" id="darkModeToggle" title="Alternar Tema">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="container hero-content text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="hero-badge animate-up">
+                        <i class="fa-solid fa-check-circle me-1"></i> Sistema de Gestão Interna
+                    </div>
+                    
+                    <h1 class="hero-title animate-up delay-1">
+                        Secretaria da Mulher<br>de Pernambuco
+                    </h1>
+                    
+                    <p class="hero-subtitle animate-up delay-1">
+                        Acompanhamento de andamento de processos, controle de etapas e gestão eficiente de fluxo de trabalho para servidores.
+                    </p>
+                    
+                    <div class="d-flex justify-content-center gap-3 animate-up delay-2">
+                        <a href="nova_instancia.html" class="btn btn-light btn-lg px-4 fw-bold shadow-sm" style="color: var(--primary-color)">
+                            <i class="fa-solid fa-plus me-2"></i> Novo Processo
+                        </a>
+                        <a href="#atalhos" class="btn btn-outline-light btn-lg px-4 fw-bold">
+                            <i class="fa-solid fa-arrow-down me-2"></i> Acessar Painel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wave-container">
+            <svg viewBox="0 0 1440 320">
+                <path class="wave-fill" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <section class="py-5" id="atalhos">
+        <div class="container py-4">
+            <div class="row mb-5 text-center">
+                <div class="col-12">
+                    <h2 class="fw-bold" style="color: var(--primary-color)">Painel de Controle</h2>
+                    <p class="text-muted">Selecione uma categoria para gerenciar</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box mx-auto">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <h5 class="card-title">Equipe & Cargos</h5>
+                            <p class="card-text">Gerencie o cadastro de novos servidores, atribuições e hierarquia de cargos.</p>
+                            <a href="cadastro_funcionario.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Gerenciar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box mx-auto">
+                                <i class="fa-solid fa-folder-tree"></i>
+                            </div>
+                            <h5 class="card-title">Modelos de Processo</h5>
+                            <p class="card-text">Crie fluxos de trabalho, defina etapas sequenciais e regras de negócio.</p>
+                            <a href="cadastro_modelo.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Configurar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box mx-auto">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <h5 class="card-title">Execução & Tarefas</h5>
+                            <p class="card-text">Acompanhe instâncias abertas, realize tarefas pendentes e anexe documentos.</p>
+                            <a href="tarefas.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-4 mt-5" style="border-top: 1px solid rgba(0,0,0,0.05);">
+        <div class="container">
+            <p class="mb-0 text-muted small">
+                &copy; 2025 Secretaria da Mulher de Pernambuco. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('darkModeToggle');
+            const icon = toggleButton.querySelector('i');
+            const body = document.body;
+
+            // 1. Verificar preferência salva no LocalStorage
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+
+            // 2. Evento de Clique
+            toggleButton.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                
+                if (currentTheme === 'dark') {
+                    // Mudar para Light
+                    body.removeAttribute('data-theme');
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    // Mudar para Dark
+                    body.setAttribute('data-theme', 'dark');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

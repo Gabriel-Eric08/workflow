@@ -7,6 +7,7 @@ from routes.modelo_processo import modelo_processo_bp
 from routes.instancia_processo import instancia_processo_bp
 from routes.tarefa_execucao import tarefa_execucao_bp
 from routes.anexo_tarefa import anexo_tarefa_bp
+from routes.home import home_bp
 
 def create_app():
     app = Flask(__name__)
@@ -20,6 +21,7 @@ def create_app():
     app.register_blueprint(instancia_processo_bp, url_prefix='/instancia/processo')
     app.register_blueprint(tarefa_execucao_bp, url_prefix='/tarefa/execucao')
     app.register_blueprint(anexo_tarefa_bp, url_prefix='/anexo/tarefa')
+    app.register_blueprint(home_bp)
     
     return app
 
