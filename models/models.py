@@ -71,16 +71,36 @@ class EtapaDefinicao(db.Model):
     __tablename__ = 'etapas_definicao'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    
+    # Colunas
     id_modelo = db.Column(db.Integer, db.ForeignKey('modelos_processos.id'), nullable=False)
-    id_cargo = db.Column(db.Integer, db.ForeignKey('cargos.id'))
-    nome_tarefa = db.Column(db.String(100))
-    ordem_sequencial = db.Column(db.Integer)
+    id_cargo = db.Column(db.Integer, db.ForeignKey('cargos.id'), nullable=False)
+    
+    nome_tarefa = db.Column(db.String(100), nullable=False)
+    descricao = db.Column(db.String(255)) # Adicionei pois o HTML envia esse campo
+    ordem_sequencial = db.Column(db.Integer, nullable=False)
+    
     requer_anexo = db.Column(db.Boolean, default=False)
     requer_obs = db.Column(db.Boolean, default=False)
     
-    # Relacionamento para acessar o cargo responsável diretamente
+    # Relacionamento (para pegar o nome do cargo depois)
     cargo_responsavel = db.relationship('Cargo')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "id_modelo": self.id_modelo,
+            "id_cargo": self.id_cargo,
+            "nome_tarefa": self.nome_tarefa,
+            "descricao": self.descricao,
+            "ordem_sequencial": self.ordem_sequencial,
+            "requer_anexo": self.requer_anexo,
+            "requer_obs": self.requer_obs,
+            
+            # --- CORREÇÃO AQUI ABAIXO ---
+            # Mudamos de .nome para .nome_cargo
+            "nome_cargo": self.cargo_responsavel.nome_cargo if self.cargo_responsavel else "N/A"
+        }
 
 class InstanciaProcesso(db.Model):
     __tablename__ = 'instancias_processos'

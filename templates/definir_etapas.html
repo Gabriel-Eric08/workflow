@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar Fluxo | Secretaria da Mulher PE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           ESTILOS (Base Consistente)
+           ========================================= */
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover: #59359a;
+            --bg-body: #f8f9fa;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #dee2e6;
+            --timeline-line: #e9ecef;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #9d6ce0;
+            --bg-body: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --navbar-bg: rgba(30, 30, 30, 0.95);
+            --border-color: #444;
+            --timeline-line: #444;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-color); padding-top: 80px; transition: 0.3s; }
+        .navbar { background-color: var(--navbar-bg); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .navbar-brand { color: var(--primary-color) !important; font-weight: 700; }
+        
+        .card { background-color: var(--card-bg); border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-primary-custom { background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.3s; }
+        
+        /* Timeline Vertical */
+        .timeline-container { position: relative; padding-left: 30px; }
+        .timeline-container::before { content: ''; position: absolute; left: 15px; top: 20px; bottom: 20px; width: 2px; background-color: var(--timeline-line); }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-node { position: absolute; left: -30px; top: 5px; width: 32px; height: 32px; background-color: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-color); z-index: 2; box-shadow: 0 0 0 4px var(--bg-body); }
+        .timeline-content { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; transition: 0.2s; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-scale-balanced me-2"></i> Sec. Mulher PE</a>
+            <div class="ms-auto">
+                <a href="/modelo/processo/" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4" style="max-width: 1100px;">
+        
+        <div class="row align-items-center mb-4">
+            <div class="col-md-8">
+                <span class="badge bg-light text-primary border mb-2">Configuração de Fluxo</span>
+                
+                <h2 class="fw-bold mb-0" id="headerNomeModelo">
+                    <span class="spinner-border spinner-border-sm text-secondary"></span> Carregando...
+                </h2>
+                <p class="text-muted mb-0" id="headerDescModelo">...</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="d-inline-block bg-white p-3 rounded-4 shadow-sm text-center border">
+                    <small class="text-muted d-block">Total de Etapas</small>
+                    <span class="h3 fw-bold text-primary mb-0" id="totalEtapasCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7 mb-4">
+                <div class="card p-4 h-100">
+                    <h5 class="fw-bold mb-4"><i class="fa-solid fa-sort-numeric-down me-2"></i>Sequência do Processo</h5>
+                    <div id="timelineList" class="timeline-container">
+                        </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card p-4 sticky-top" style="top: 100px;">
+                    <div id="alertBox" class="alert d-none"></div>
+                    
+                    <h5 class="fw-bold mb-3">Adicionar Nova Etapa</h5>
+                    
+                    <form id="formNovaEtapa">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Nome da Tarefa <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nome_tarefa" placeholder="Ex: Análise Jurídica" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Descrição (Instrução)</label>
+                            <textarea class="form-control" id="descricao_etapa" rows="2" placeholder="O que deve ser feito nesta etapa?"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Cargo Responsável <span class="text-danger">*</span></label>
+                            <select class="form-select" id="id_cargo" required>
+                                <option value="" selected disabled>Carregando cargos...</option>
+                            </select>
+                            <div class="form-text">Quem aprova ou executa esta etapa.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Configurações</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="requer_anexo">
+                                    <label class="form-check-label" for="requer_anexo">Exige Anexo</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="requer_obs">
+                                    <label class="form-check-label" for="requer_obs">Exige Obs.</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="fa-solid fa-plus me-2"></i> Adicionar ao Fluxo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 1. PEGAR ID DA URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const modeloId = urlParams.get('id');
+
+        if(!modeloId) {
+            alert("ID do modelo não encontrado. Retornando...");
+            window.history.back(); // Volta se não tiver ID
+        }
+
+        // ======================================================
+        // A. CARREGAR NOME DO MODELO (Para o Header)
+        // ======================================================
+        async function carregarInfoModelo() {
+            try {
+                // Buscamos todos para filtrar o correto (já que não temos rota get_by_id específica ainda)
+                const response = await fetch('/modelo/processo/all');
+                const result = await response.json();
+
+                if (result.sucess) {
+                    // Encontra o modelo com o ID da URL
+                    // O ID na URL vem como string, por isso "==" e não "==="
+                    const modelo = result.modelos.find(m => m.id == modeloId);
+
+                    if (modelo) {
+                        document.getElementById('headerNomeModelo').innerText = modelo.nome_processo;
+                        document.getElementById('headerDescModelo').innerText = `Código: ${modelo.codigo_processo}`;
+                    } else {
+                        document.getElementById('headerNomeModelo').innerText = "Modelo não encontrado";
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar info do modelo:", error);
+                document.getElementById('headerNomeModelo').innerText = "Erro ao carregar";
+            }
+        }
+
+        // ======================================================
+        // B. CARREGAR SELECT DE CARGOS (/cargos/all)
+        // ======================================================
+        async function carregarCargos() {
+            const select = document.getElementById('id_cargo');
+            
+            try {
+                // Ajuste a rota se necessário (ex: /cargo/all ou /cargos/all)
+                const response = await fetch('/cargo/all'); 
+                const result = await response.json();
+
+                // Limpa o select
+                select.innerHTML = '<option value="" selected disabled>Selecione um cargo...</option>';
+
+                if (result.sucess) {
+                    const listaCargos = result.cargos; 
+                    
+                    listaCargos.forEach(cargo => {
+                        const option = document.createElement('option');
+                        option.value = cargo.id;
+                        // CORREÇÃO AQUI: De 'cargo.nome' para 'cargo.nome_cargo'
+                        option.text = cargo.nome_cargo; 
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option disabled>Erro ao carregar cargos</option>';
+                }
+            } catch (error) {
+                console.error("Erro ao carregar cargos:", error);
+                select.innerHTML = '<option disabled>Erro na conexão</option>';
+            }
+        }
+
+        // ======================================================
+        // C. CARREGAR AS ETAPAS EXISTENTES (Timeline)
+        // ======================================================
+        async function carregarEtapas() {
+            const container = document.getElementById('timelineList');
+            const counter = document.getElementById('totalEtapasCount');
+            
+            container.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Carregando fluxo...</div>';
+
+            try {
+                const response = await fetch(`/etapa/by_modelo/${modeloId}`);
+                const result = await response.json();
+
+                if(result.sucess) {
+                    const etapas = result.etapas;
+                    counter.innerText = etapas.length;
+
+                    if(etapas.length === 0) {
+                        container.innerHTML = `
+                            <div class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-wind fa-2x mb-2"></i>
+                                <p>Nenhuma etapa definida para este processo.</p>
+                            </div>`;
+                        return;
+                    }
+
+                    let html = '';
+                    etapas.forEach((etapa) => {
+                        // Verifica se existe o nome do cargo vindo do backend, senão usa o ID
+                        // O backend provavelmente não está enviando nome_cargo dentro da etapa ainda, então isso pode aparecer como ID por enquanto
+                        const nomeCargo = etapa.nome_cargo ? etapa.nome_cargo : `Cargo ID: ${etapa.id_cargo}`;
+
+                        html += `
+                            <div class="timeline-item">
+                                <div class="timeline-node">${etapa.ordem_sequencial}</div>
+                                <div class="timeline-content">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">${etapa.nome_tarefa}</h6>
+                                            <p class="small text-muted mb-2">${etapa.descricao || ''}</p>
+                                            
+                                            <span class="badge bg-light text-dark border mb-2">
+                                                <i class="fa-solid fa-user-tie me-1"></i> ${nomeCargo}
+                                            </span>
+
+                                            <div class="mt-1">
+                                                ${etapa.requer_anexo ? '<span class="badge bg-secondary me-1"><i class="fa-solid fa-paperclip"></i> Anexo</span>' : ''}
+                                                ${etapa.requer_obs ? '<span class="badge bg-secondary"><i class="fa-solid fa-comment"></i> Obs</span>' : ''}
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-sm text-danger opacity-50 hover-opacity-100"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Adiciona o fim do processo visualmente
+                    html += `
+                        <div class="timeline-item">
+                            <div class="timeline-node bg-success text-white border-success" style="box-shadow: none;">
+                                <i class="fa-solid fa-flag-checkered"></i>
+                            </div>
+                            <div class="timeline-content border-success bg-success bg-opacity-10">
+                                <span class="fw-bold text-success small">FIM DO PROCESSO</span>
+                            </div>
+                        </div>
+                    `;
+
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<div class="alert alert-warning">Não foi possível carregar as etapas.</div>';
+                }
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<div class="alert alert-danger">Erro de conexão com o servidor.</div>';
+            }
+        }
+
+        // ======================================================
+        // D. SALVAR NOVA ETAPA (POST)
+        // ======================================================
+        document.getElementById('formNovaEtapa').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button');
+            const alertBox = document.getElementById('alertBox');
+            
+            // Calcula próxima ordem
+            const currentTotal = parseInt(document.getElementById('totalEtapasCount').innerText) || 0;
+            const proximaOrdem = currentTotal + 1;
+
+            const payload = {
+                id_modelo: parseInt(modeloId),
+                id_cargo: parseInt(document.getElementById('id_cargo').value), // Valor do Select
+                nome_tarefa: document.getElementById('nome_tarefa').value,
+                descricao: document.getElementById('descricao_etapa').value,
+                ordem_sequencial: proximaOrdem,
+                requer_anexo: document.getElementById('requer_anexo').checked,
+                requer_obs: document.getElementById('requer_obs').checked
+            };
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Salvando...';
+
+                const response = await fetch('/etapa/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if(result.sucess) {
+                    this.reset();
+                    // Recarrega lista
+                    carregarEtapas(); 
+                    
+                    // Sucesso visual rápido
+                    alertBox.className = 'alert alert-success py-2';
+                    alertBox.innerHTML = '<i class="fa-solid fa-check"></i> Etapa adicionada!';
+                    alertBox.classList.remove('d-none');
+                    setTimeout(() => alertBox.classList.add('d-none'), 3000);
+
+                } else {
+                    alertBox.innerText = result.message || "Erro ao salvar";
+                    alertBox.className = 'alert alert-danger';
+                    alertBox.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao conectar com o servidor.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-plus me-2"></i> Adicionar ao Fluxo';
+            }
+        });
+
+        // ======================================================
+        // INICIALIZAÇÃO
+        // ======================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarInfoModelo(); // Carrega o título
+            carregarCargos();     // Preenche o Select
+            carregarEtapas();     // Monta a timeline
+        });
+
+    </script>
+</body>
+</html>

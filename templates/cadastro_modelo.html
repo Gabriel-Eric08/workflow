@@ -137,7 +137,7 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-lista-tab" data-bs-toggle="pill" data-bs-target="#pills-lista" type="button" role="tab">
+                <button class="nav-link" id="pills-lista-tab" data-bs-toggle="pill" data-bs-target="#pills-lista" type="button" role="tab" onclick="carregarModelos()">
                     <i class="fa-solid fa-layer-group me-2"></i>Todos os Modelos
                 </button>
             </li>
@@ -245,7 +245,7 @@
                 btn.disabled = true;
                 btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Criando...';
 
-                // Rota corrigida: /modelo/processo/register
+                // Rota: /modelo/processo/register
                 const response = await fetch('/modelo/processo/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -260,7 +260,7 @@
                     alertBox.classList.remove('d-none');
                     this.reset();
                     
-                    // Atualiza a listagem
+                    // Recarrega a listagem
                     carregarModelos();
                 } else {
                     throw new Error(result.message || 'Erro ao criar modelo.');
@@ -281,15 +281,17 @@
         async function carregarModelos() {
             const tbody = document.getElementById('tabelaModelosBody');
             const emptyState = document.getElementById('emptyState');
-            tbody.innerHTML = '';
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><span class="spinner-border text-primary"></span></td></tr>';
 
             try {
-                // Rota corrigida: /modelo/processo/all
+                // Rota: /modelo/processo/all
                 const response = await fetch('/modelo/processo/all');
                 const result = await response.json();
 
+                // Limpa o loading
+                tbody.innerHTML = '';
+
                 if (result.sucess) {
-                    // Chave corrigida: modelos
                     const dados = result.modelos; 
 
                     if (!dados || dados.length === 0) {
@@ -322,7 +324,7 @@
                                 ${modelo.descricao || '-'}
                             </td>
                             <td class="text-end">
-                                <a href="definir_etapas.html?id=${modelo.id}" class="btn-fluxo me-2" title="Configurar Etapas do Processo">
+                                <a href="/etapa/fluxo?id=${modelo.id}" class="btn-fluxo me-2" title="Configurar Etapas do Processo">
                                     <i class="fa-solid fa-diagram-project me-1"></i> Fluxo
                                 </a>
                                 
@@ -334,10 +336,12 @@
                     });
                 } else {
                     console.error('Erro na resposta:', result.message);
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro ao carregar dados.</td></tr>';
                 }
 
             } catch (error) {
                 console.error('Erro na requisição GET:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro de conexão com o servidor.</td></tr>';
             }
         }
 

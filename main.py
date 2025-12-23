@@ -16,7 +16,7 @@ def create_app():
 
     app.register_blueprint(cargo_bp, url_prefix='/cargo')
     app.register_blueprint(funcionario_bp, url_prefix='/funcionario')
-    app.register_blueprint(etapa_definicao_bp, url_prefix='/etapa/definicao')
+    app.register_blueprint(etapa_definicao_bp, url_prefix='/etapa')
     app.register_blueprint(modelo_processo_bp, url_prefix='/modelo/processo')
     app.register_blueprint(instancia_processo_bp, url_prefix='/instancia/processo')
     app.register_blueprint(tarefa_execucao_bp, url_prefix='/tarefa/execucao')
