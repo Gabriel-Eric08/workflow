@@ -58,6 +58,14 @@ class ModeloProcesso(db.Model):
     etapas = db.relationship('EtapaDefinicao', backref='modelo', lazy=True)
     instancias = db.relationship('InstanciaProcesso', backref='modelo', lazy=True)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.nome_processo,      # Front-end espera 'name'
+            "key": self.codigo_processo,     # Front-end espera 'key'
+            "description": self.descricao    # Front-end espera 'description'
+        }
+
 
 class EtapaDefinicao(db.Model):
     __tablename__ = 'etapas_definicao'

@@ -14,3 +14,6 @@ class ModeloProcessoRepository:
         except Exception as e:
             print(f"Repository error: {e}")
             return False
+    def get_all(self):
+        modelos_processos = ModeloProcesso.query.all()
+        return modelos_processos

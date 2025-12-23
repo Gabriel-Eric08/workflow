@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from services.modelo_processo_service import ModeloProcessoService
 
 modelo_processo_service = ModeloProcessoService()
@@ -30,3 +30,28 @@ def register():
         "sucess":False,
         "message":"Internal server error"
     }), 500
+
+@modelo_processo_bp.route('/all', methods=['GET'])
+def get_all():
+    try:
+        modelos = modelo_processo_service.get_all()
+        
+        # Converte cada objeto Cargo para dicionário
+        modelos_list = [modelo.to_dict() for modelo in modelos]
+        
+        return jsonify({
+            "sucess": True,
+            "cargos": modelos_list
+        }), 200
+        
+    except Exception as e:
+        # Só retorna 500 se realmente der um erro de servidor (exceção)
+        print(f"Erro na rota: {e}")
+        return jsonify({
+            "sucess": False,
+            "message": "Internal server error"
+        }), 500
+    
+@modelo_processo_bp.route('/')
+def modelo_processo_page():
+    return render_template('cadastro_modelo.html')

@@ -11,3 +11,7 @@ class ModeloProcessoService:
             db.session.commit()
             return True
         return False
+    
+    def get_all(self):
+        modelos_processos = self.repo.get_all()
+        return modelos_processos

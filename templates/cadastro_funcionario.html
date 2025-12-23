@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS REUTILIZADO (Mesmo do Cargo) */
+        /* =========================================
+           ESTILOS (Mesmo padrão visual)
+           ========================================= */
         :root {
             --primary-color: #6f42c1;
             --primary-hover: #59359a;
@@ -43,7 +45,7 @@
         .nav-link { color: var(--navbar-text) !important; font-weight: 500; }
         .btn-theme-toggle { border: 1px solid var(--navbar-text); color: var(--navbar-text); width: 40px; height: 40px; border-radius: 50%; background: transparent; }
 
-        .main-container { max-width: 1000px; margin: 40px auto; } /* Container um pouco maior */
+        .main-container { max-width: 1000px; margin: 40px auto; }
         .card { background-color: var(--card-bg); border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
         .nav-pills .nav-link { color: var(--text-color); font-weight: 600; border-radius: 50px; padding: 10px 25px; margin-right: 10px; }
@@ -55,15 +57,12 @@
         .table-hover tbody tr:hover { background-color: var(--table-hover); color: var(--text-color); }
 
         .form-control { background-color: var(--input-bg); border-color: var(--border-color); color: var(--text-color); border-radius: 10px; padding: 12px; }
-        .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25); color: var(--text-color); background-color: var(--input-bg); }
         .btn-primary-custom { background-color: var(--primary-color); color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; transition: 0.3s; }
         .btn-primary-custom:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
         .btn-action { width: 35px; height: 35px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: none; }
         .btn-edit { background-color: rgba(255, 193, 7, 0.15); color: #ffc107; }
-        .btn-edit:hover { background-color: #ffc107; color: #000; }
         .btn-delete { background-color: rgba(220, 53, 69, 0.15); color: #dc3545; }
-        .btn-delete:hover { background-color: #dc3545; color: white; }
     </style>
 </head>
 <body>
@@ -80,6 +79,13 @@
                         <ul class="dropdown-menu border-0 shadow">
                             <li><a class="dropdown-item" href="cadastro_cargo.html">Gerenciar Cargos</a></li>
                             <li><a class="dropdown-item" href="cadastro_funcionario.html">Gerenciar Funcionários</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Processos</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="cadastro_modelo.html">Novo Modelo</a></li>
+                            <li><a class="dropdown-item" href="nova_instancia.html">Iniciar Processo</a></li>
                         </ul>
                     </li>
                     <li class="nav-item ms-lg-3"><button class="btn-theme-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></button></li>
@@ -110,25 +116,26 @@
                 
                 <div class="tab-pane fade show active" id="pills-cadastro" role="tabpanel">
                     <div id="alertBox" class="alert d-none" role="alert"></div>
+                    
                     <form id="formFuncionario">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Maria da Silva" required>
+                                <input type="text" class="form-control" id="nome" placeholder="Ex: Gabriel Eric" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="email@gov.pe.br" required>
+                                <input type="email" class="form-control" id="email" placeholder="email@teste.com" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="senha_hash" class="form-label">Senha Inicial <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" id="senha_hash" name="senha_hash" required>
+                                <input type="password" class="form-control" id="senha_hash" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="id_cargo" class="form-label">ID Cargo <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="id_cargo" name="id_cargo" placeholder="Ex: 1" required>
+                                <input type="number" class="form-control" id="id_cargo" placeholder="Ex: 1" required>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-2">
@@ -142,6 +149,7 @@
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
+                                    <th scope="col">ID</th>
                                     <th scope="col">Nome</th>
                                     <th scope="col">E-mail</th>
                                     <th scope="col">Cargo (ID)</th>
@@ -181,17 +189,22 @@
             }
         });
 
-        // --- 2. Enviar Formulário ---
+        // =========================================
+        // 2. ENVIAR FORMULÁRIO (CORRIGIDO)
+        // =========================================
         document.getElementById('formFuncionario').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
             const alertBox = document.getElementById('alertBox');
             
+            // --- CORREÇÃO DA ESTRUTURA JSON ---
+            // O backend espera: id_cargo, nome, email, senha, ativo
             const data = {
+                id_cargo: parseInt(document.getElementById('id_cargo').value),
                 nome: document.getElementById('nome').value,
                 email: document.getElementById('email').value,
-                senha_hash: document.getElementById('senha_hash').value,
-                id_cargo: parseInt(document.getElementById('id_cargo').value)
+                senha: document.getElementById('senha_hash').value, // Envia como 'senha'
+                ativo: 1 // Adicionado campo obrigatório
             };
 
             try {
@@ -210,7 +223,9 @@
                     alertBox.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i> Funcionário cadastrado!';
                     alertBox.classList.remove('d-none');
                     this.reset();
-                    carregarListaFunc(); // Atualiza lista (Mock)
+                    
+                    // Atualiza a aba de lista
+                    carregarListaFunc();
                 } else {
                     throw new Error(result.message || 'Erro ao cadastrar');
                 }
@@ -224,38 +239,52 @@
             }
         });
 
-        // --- 3. Mock Data Funcionários ---
-        const mockFuncionarios = [
-            { id: 1, nome: 'Ana Souza', email: 'ana.souza@secmulher.pe.gov.br', cargo_id: 1, ativo: true },
-            { id: 2, nome: 'Carlos Pereira', email: 'carlos.pereira@secmulher.pe.gov.br', cargo_id: 2, ativo: true },
-            { id: 3, nome: 'Mariana Lima', email: 'mariana.lima@secmulher.pe.gov.br', cargo_id: 2, ativo: false },
-        ];
-
-        function carregarListaFunc() {
+        // =========================================
+        // 3. CARREGAR LISTA DE FUNCIONÁRIOS
+        // =========================================
+        async function carregarListaFunc() {
             const tbody = document.getElementById('tabelaFuncBody');
             tbody.innerHTML = '';
 
-            // Dados Fictícios
-            const dados = mockFuncionarios;
+            try {
+                const response = await fetch('/funcionario/all'); 
+                const result = await response.json();
 
-            dados.forEach(func => {
-                const statusBadge = func.ativo 
-                    ? '<span class="badge bg-success bg-opacity-10 text-success">Ativo</span>'
-                    : '<span class="badge bg-secondary bg-opacity-10 text-secondary">Inativo</span>';
+                if (result.sucess) {
+                    const dados = result.funcionarios;
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="fw-bold">${func.nome}</td>
-                    <td>${func.email}</td>
-                    <td><span class="badge bg-light text-dark border">ID ${func.cargo_id}</span></td>
-                    <td>${statusBadge}</td>
-                    <td class="text-end">
-                        <button class="btn-action btn-edit me-1"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+                    if (!dados || dados.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Nenhum funcionário encontrado.</td></tr>';
+                        return;
+                    }
+
+                    dados.forEach(func => {
+                        // Verifica se "ativo" é true ou 1
+                        const isActive = (func.ativo === true || func.ativo === 1);
+                        const statusBadge = isActive 
+                            ? '<span class="badge bg-success bg-opacity-10 text-success">Ativo</span>'
+                            : '<span class="badge bg-secondary bg-opacity-10 text-secondary">Inativo</span>';
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="fw-bold">#${func.id}</td>
+                            <td>${func.nome}</td>
+                            <td>${func.email}</td>
+                            <td><span class="badge bg-light text-dark border">ID ${func.id_cargo}</span></td>
+                            <td>${statusBadge}</td>
+                            <td class="text-end">
+                                <button class="btn-action btn-edit me-1" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn-action btn-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    console.error('Erro na resposta:', result.message);
+                }
+            } catch (error) {
+                console.error('Erro na requisição GET:', error);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', carregarListaFunc);

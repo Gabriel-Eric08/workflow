@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from services.funcionario_service import FuncionarioService
 
 funcionario_service = FuncionarioService()
@@ -54,3 +54,7 @@ def get_all():
             "sucess": False,
             "message": "Internal server error"
         }), 500
+
+@funcionario_bp.route('/')
+def funcionario_page():
+    return render_template('cadastro_funcionario.html')

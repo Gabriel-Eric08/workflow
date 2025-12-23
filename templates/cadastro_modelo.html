@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelos de Processo | Secretaria da Mulher PE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           ESTILOS GERAIS (Padrão do Projeto)
+           ========================================= */
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover: #59359a;
+            --bg-body: #f8f9fa;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --navbar-text: #333;
+            --input-bg: #ffffff;
+            --border-color: #dee2e6;
+            --table-hover: #f1f1f1;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #9d6ce0;
+            --primary-hover: #b589f0;
+            --bg-body: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --navbar-bg: rgba(30, 30, 30, 0.95);
+            --navbar-text: #f8f9fa;
+            --input-bg: #2d2d2d;
+            --border-color: #444;
+            --table-hover: #2c2c2c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-top: 80px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--navbar-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        .navbar-brand { color: var(--primary-color) !important; font-weight: 700; }
+        .nav-link { color: var(--navbar-text) !important; font-weight: 500; }
+        .btn-theme-toggle {
+            border: 1px solid var(--navbar-text);
+            color: var(--navbar-text);
+            width: 40px; height: 40px; border-radius: 50%;
+            background: transparent; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Container & Cards */
+        .main-container { max-width: 950px; margin: 40px auto; }
+        .card {
+            background-color: var(--card-bg);
+            border: none; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Nav Pills (Abas) */
+        .nav-pills .nav-link {
+            color: var(--text-color);
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 10px 25px;
+            margin-right: 10px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--input-bg);
+            border-color: var(--border-color);
+            color: var(--text-color);
+            border-radius: 10px; padding: 12px;
+        }
+        .form-control:focus {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+        }
+        .form-text { opacity: 0.7; font-size: 0.85rem; }
+
+        /* Tabela */
+        .table { color: var(--text-color); margin-bottom: 0; }
+        .table thead th { 
+            background-color: transparent; 
+            border-bottom: 2px solid var(--border-color); 
+            color: var(--primary-color);
+        }
+        .table td, .table th { border-color: var(--border-color); vertical-align: middle; }
+        .table-hover tbody tr:hover { background-color: var(--table-hover); color: var(--text-color); }
+        
+        .badge-key {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(111, 66, 193, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(111, 66, 193, 0.2);
+            padding: 4px 8px; border-radius: 6px; font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.3s;
+        }
+        .btn-primary-custom:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        
+        .btn-action { width: 35px; height: 35px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: none; }
+        .btn-edit { background-color: rgba(255, 193, 7, 0.15); color: #ffc107; }
+        .btn-edit:hover { background-color: #ffc107; color: #000; }
+        .btn-delete { background-color: rgba(220, 53, 69, 0.15); color: #dc3545; }
+        .btn-delete:hover { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-scale-balanced me-2"></i> Sec. Mulher PE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(0.5);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Administração</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="cadastro_cargo.html">Gerenciar Cargos</a></li>
+                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Gerenciar Funcionários</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Processos</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item active" href="cadastro_modelo.html">Novo Modelo</a></li>
+                            <li><a class="dropdown-item" href="nova_instancia.html">Iniciar Processo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <button class="btn-theme-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-0" style="color: var(--primary-color)">Modelos de Processo</h2>
+                <p class="text-muted mb-0">Defina os fluxos de trabalho da secretaria</p>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-cadastro-tab" data-bs-toggle="pill" data-bs-target="#pills-cadastro" type="button" role="tab">
+                    <i class="fa-solid fa-file-circle-plus me-2"></i>Novo Modelo
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-lista-tab" data-bs-toggle="pill" data-bs-target="#pills-lista" type="button" role="tab">
+                    <i class="fa-solid fa-layer-group me-2"></i>Todos os Modelos
+                </button>
+            </li>
+        </ul>
+
+        <div class="card p-4">
+            <div class="tab-content" id="pills-tabContent">
+                
+                <div class="tab-pane fade show active" id="pills-cadastro" role="tabpanel">
+                    <div id="alertBox" class="alert d-none" role="alert"></div>
+                    
+                    <form id="formModelo">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="nome_modelo" class="form-label">Nome do Processo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nome_modelo" placeholder="Ex: Solicitação de Medida Protetiva" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="chave_processo" class="form-label">Código/Chave Única</label>
+                                <input type="text" class="form-control" id="chave_processo" placeholder="Ex: MEDIDA_PROT_01" style="text-transform: uppercase;">
+                                <div class="form-text">Identificador usado pelo sistema (Opcional).</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="descricao" class="form-label">Descrição do Fluxo</label>
+                            <textarea class="form-control" id="descricao" rows="4" placeholder="Descreva o objetivo deste processo e quais etapas ele deve conter..."></textarea>
+                        </div>
+
+                        <div class="p-3 mb-4 rounded border border-dashed" style="background-color: var(--bg-body); border-style: dashed !important;">
+                            <h6 class="text-muted"><i class="fa-solid fa-diagram-project me-2"></i>Configuração de Etapas</h6>
+                            <p class="small text-muted mb-0">As etapas deste processo (ex: Início -> Análise -> Aprovação -> Fim) serão configuradas após a criação do modelo base.</p>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary-custom px-4">
+                                <i class="fa-solid fa-save me-2"></i> Criar Modelo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pills-lista" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 50px;">ID</th>
+                                    <th scope="col">Nome do Modelo</th>
+                                    <th scope="col">Chave (Key)</th>
+                                    <th scope="col">Descrição</th>
+                                    <th scope="col" class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaModelosBody">
+                                </tbody>
+                        </table>
+                    </div>
+                    <div id="emptyState" class="text-center py-5 d-none">
+                        <i class="fa-solid fa-clipboard-list fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Nenhum modelo de processo cadastrado.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =========================================
+        // 1. DARK MODE TOGGLE
+        // =========================================
+        const toggleButton = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const icon = toggleButton.querySelector('i');
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        toggleButton.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // =========================================
+        // 2. CADASTRO DE MODELO (POST)
+        // =========================================
+        document.getElementById('formModelo').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button[type="submit"]');
+            const alertBox = document.getElementById('alertBox');
+            
+            // Dados do formulário
+            const payload = {
+                name: document.getElementById('nome_modelo').value,
+                key: document.getElementById('chave_processo').value.toUpperCase(), // Boa prática: Chaves em UpperCase
+                description: document.getElementById('descricao').value
+            };
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Criando...';
+
+                // Rota hipotética: /modelo/create
+                const response = await fetch('/modelo/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok || result.sucess) {
+                    alertBox.className = 'alert alert-success';
+                    alertBox.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i> Modelo criado com sucesso!';
+                    alertBox.classList.remove('d-none');
+                    this.reset();
+                    // Atualiza a lista
+                    carregarModelos();
+                } else {
+                    throw new Error(result.message || 'Erro ao criar modelo.');
+                }
+            } catch (error) {
+                alertBox.className = 'alert alert-danger';
+                alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation me-2"></i> ' + error.message;
+                alertBox.classList.remove('d-none');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-save me-2"></i> Criar Modelo';
+            }
+        });
+
+        // =========================================
+        // 3. LISTAGEM DE MODELOS (GET)
+        // =========================================
+        // MOCK DATA PARA TESTE VISUAL (Caso a rota ainda não exista)
+        const mockModelos = [
+            { id: 1, name: 'Solicitação de Férias', key: 'FERIAS_V1', description: 'Fluxo padrão para solicitação de gozo de férias.' },
+            { id: 2, name: 'Denúncia Anônima', key: 'DENUNCIA_EXT', description: 'Recebimento e triagem de denúncias externas.' }
+        ];
+
+        async function carregarModelos() {
+            const tbody = document.getElementById('tabelaModelosBody');
+            const emptyState = document.getElementById('emptyState');
+            tbody.innerHTML = '';
+
+            try {
+                // Tenta buscar da API
+                // const response = await fetch('/modelo/all');
+                // const result = await response.json();
+                // const dados = result.modelos;
+
+                // --- MODO DE TESTE (MOCK) ---
+                // Remova estas linhas quando tiver o back-end pronto e descomente o fetch acima
+                const dados = mockModelos; 
+                // ----------------------------
+
+                if (!dados || dados.length === 0) {
+                    emptyState.classList.remove('d-none');
+                    return;
+                }
+                emptyState.classList.add('d-none');
+
+                dados.forEach(modelo => {
+                    const tr = document.createElement('tr');
+                    
+                    // Tratamento caso a "chave" esteja vazia
+                    const keyBadge = modelo.key 
+                        ? `<span class="badge-key">${modelo.key}</span>` 
+                        : `<span class="text-muted small">N/A</span>`;
+
+                    tr.innerHTML = `
+                        <td class="fw-bold">#${modelo.id}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-2 text-primary">
+                                    <i class="fa-solid fa-sitemap"></i>
+                                </div>
+                                <span>${modelo.name}</span>
+                            </div>
+                        </td>
+                        <td>${keyBadge}</td>
+                        <td class="text-muted small">${modelo.description || '-'}</td>
+                        <td class="text-end">
+                            <button class="btn-action btn-edit me-1" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action btn-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error('Erro ao listar modelos:', error);
+            }
+        }
+
+        // Inicializa
+        document.addEventListener('DOMContentLoaded', carregarModelos);
+    </script>
+</body>
+</html>
