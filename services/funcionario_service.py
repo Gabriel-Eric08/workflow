@@ -16,3 +16,6 @@ class FuncionarioService:
             db.session.commit()
             return True
         return False
+    def get_all(self):
+        funcionarios = self.repo.get_all()
+        return funcionarios

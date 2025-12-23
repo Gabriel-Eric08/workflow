@@ -30,7 +30,17 @@ class Funcionario(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True)
     senha_hash = db.Column(db.Text)
-    ativo = db.Column(db.Boolean, default=True) # Mapeia TINYINT(1) automaticamente
+    ativo = db.Column(db.Boolean, default=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,             # ID do funcionário (não do cargo)
+            "id_cargo": self.id_cargo, # ID do cargo vinculado
+            "nome": self.nome,         # Nome da pessoa
+            "email": self.email,       # Email
+            "ativo": self.ativo        # Status
+            # Dica de segurança: Evite retornar 'senha_hash' no JSON para o front-end
+        }
 
     def __repr__(self):
         return f'<Funcionario {self.nome}>'

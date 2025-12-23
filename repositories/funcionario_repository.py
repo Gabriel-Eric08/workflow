@@ -16,3 +16,7 @@ class FuncionarioRepository:
        except Exception as e:
           print(f"Repository error: {e}")
           return False
+       
+    def get_all(self):
+       funcionarios = Funcionario.query.all()
+       return funcionarios
