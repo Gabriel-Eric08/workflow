@@ -45,6 +45,7 @@
         .navbar { background-color: var(--navbar-bg); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
         .navbar-brand { color: var(--primary-color) !important; font-weight: 700; }
         .nav-link { color: var(--navbar-text) !important; font-weight: 500; }
+        .nav-link.active { color: var(--primary-color) !important; font-weight: 700; } /* Destaque para link ativo */
         .btn-theme-toggle { border: 1px solid var(--navbar-text); color: var(--navbar-text); width: 40px; height: 40px; border-radius: 50%; background: transparent; display: flex; align-items: center; justify-content: center; }
 
         /* Container & Card */
@@ -97,31 +98,55 @@
 
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-scale-balanced me-2"></i> Sec. Mulher PE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon" style="filter: invert(0.5);"></span></button>
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-scale-balanced me-2"></i>
+                Sec. Mulher PE
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(0.5);"></span>
+            </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Administração</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Administração
+                        </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" href="cadastro_cargo.html">Gerenciar Cargos</a></li>
-                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Gerenciar Funcionários</a></li>
+                            <li><a class="dropdown-item" href="/cargo/">Novo Cargo</a></li>
+                            <li><a class="dropdown-item" href="/funcionario/">Novo Funcionário</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Processos</a>
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            Processos
+                        </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item active" href="cadastro_modelo.html">Novo Modelo</a></li>
-                            <li><a class="dropdown-item" href="nova_instancia.html">Iniciar Processo</a></li>
+                            <li><a class="dropdown-item active" href="/modelo/processo">Novo Modelo</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/processo/dashboard"><strong>Iniciar Processo</strong></a></li>
                         </ul>
                     </li>
-                    <li class="nav-item ms-lg-3"><button class="btn-theme-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></button></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Relatórios</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <button class="btn-theme-toggle" id="darkModeToggle" title="Alternar Tema">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container main-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>

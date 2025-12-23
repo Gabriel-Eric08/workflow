@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Cargos | Secretaria da Mulher PE</title>
+    <title>Gerenciar Cargos | Secretaria da Mulher - PE</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -11,11 +11,12 @@
 
     <style>
         /* =========================================
-           VARIÁVEIS & TEMA (Padrão Secretaria)
+           VARIÁVEIS DE CORES & TEMA
            ========================================= */
         :root {
             --primary-color: #6f42c1;
             --primary-hover: #59359a;
+            --accent-color: #a673e8;
             --bg-body: #f8f9fa;
             --text-color: #333333;
             --card-bg: #ffffff;
@@ -24,6 +25,8 @@
             --input-bg: #ffffff;
             --border-color: #dee2e6;
             --table-hover: #f1f1f1;
+            --hero-gradient: linear-gradient(135deg, #6f42c1 0%, #a673e8 100%);
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         [data-theme="dark"] {
@@ -37,51 +40,95 @@
             --input-bg: #2d2d2d;
             --border-color: #444;
             --table-hover: #2c2c2c;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        /* =========================================
+           ESTILOS GERAIS
+           ========================================= */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-color);
             transition: background-color 0.3s ease, color 0.3s ease;
-            padding-top: 80px; /* Espaço para navbar fixa */
+            padding-top: 85px; /* Espaço para navbar fixa */
         }
+
+        a { text-decoration: none; }
 
         /* Navbar */
         .navbar {
             background-color: var(--navbar-bg);
             backdrop-filter: blur(10px);
-            padding: 15px 0;
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        }
-        .navbar-brand { color: var(--primary-color) !important; font-weight: 700; }
-        .nav-link { color: var(--navbar-text) !important; font-weight: 500; }
-        .btn-theme-toggle {
-            border: 1px solid var(--navbar-text);
-            color: var(--navbar-text);
-            width: 40px; height: 40px; border-radius: 50%;
-            background: transparent; display: flex; align-items: center; justify-content: center;
+            transition: background-color 0.3s ease;
+            padding: 15px 0;
         }
 
-        /* Container & Cards */
-        .main-container { max-width: 900px; margin: 40px auto; }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--navbar-text) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-theme-toggle {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 1px solid var(--navbar-text);
+            color: var(--navbar-text);
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; transition: all 0.3s ease;
+        }
+        .btn-theme-toggle:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white; transform: rotate(15deg);
+        }
+
+        /* Cards & Container */
+        .main-container { max-width: 1000px; margin: 0 auto; padding-bottom: 50px; }
+        
         .card {
             background-color: var(--card-bg);
             border: none; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Nav Pills (Abas) */
+        /* Nav Pills (Abas) - CORREÇÃO DE COR */
         .nav-pills .nav-link {
             color: var(--text-color);
             font-weight: 600;
             border-radius: 50px;
             padding: 10px 25px;
             margin-right: 10px;
+            transition: all 0.3s;
         }
+
+        .nav-pills .nav-link:hover { 
+            background-color: rgba(111, 66, 193, 0.1); 
+            color: var(--primary-color); 
+        }
+
         .nav-pills .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--primary-color) !important;
+            color: #ffffff !important; /* Força o branco no texto */
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+        
+        /* Garante que o ícone dentro da aba ativa também fique branco */
+        .nav-pills .nav-link.active i {
+            color: #ffffff !important;
         }
 
         /* Form Controls */
@@ -97,6 +144,7 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
         }
+        .form-label { font-weight: 500; font-size: 0.9rem; margin-bottom: 8px; }
 
         /* Tabela */
         .table { color: var(--text-color); margin-bottom: 0; }
@@ -104,54 +152,76 @@
             background-color: transparent; 
             border-bottom: 2px solid var(--border-color); 
             color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
-        .table td, .table th { border-color: var(--border-color); vertical-align: middle; }
+        .table td, .table th { border-color: var(--border-color); vertical-align: middle; padding: 15px; }
         .table-hover tbody tr:hover { background-color: var(--table-hover); color: var(--text-color); }
-        .text-truncate-custom {
-            max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block;
-        }
-
-        /* Botões */
+        
+        /* Botões Específicos */
         .btn-primary-custom {
             background-color: var(--primary-color);
-            color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.3s;
+            color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
         }
-        .btn-primary-custom:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
-        
-        .btn-action { width: 35px; height: 35px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: none; }
+        .btn-primary-custom:hover { background-color: var(--primary-hover); transform: translateY(-2px); color: white; }
+
+        .btn-action { width: 35px; height: 35px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; border: none; transition: 0.2s; }
         .btn-edit { background-color: rgba(255, 193, 7, 0.15); color: #ffc107; }
-        .btn-edit:hover { background-color: #ffc107; color: #000; }
+        .btn-edit:hover { background-color: #ffc107; color: #000; transform: scale(1.1); }
         .btn-delete { background-color: rgba(220, 53, 69, 0.15); color: #dc3545; }
-        .btn-delete:hover { background-color: #dc3545; color: white; }
+        .btn-delete:hover { background-color: #dc3545; color: white; transform: scale(1.1); }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-scale-balanced me-2"></i> Sec. Mulher PE</a>
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-scale-balanced me-2"></i>
+                Sec. Mulher PE
+            </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon" style="filter: invert(0.5);"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Administração</a>
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                            Administração
+                        </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" href="cadastro_cargo.html">Gerenciar Cargos</a></li>
-                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Gerenciar Funcionários</a></li>
+                            <li><a class="dropdown-item active" href="/cargo/">Novo Cargo</a></li>
+                            <li><a class="dropdown-item" href="/funcionario/">Novo Funcionário</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Processos</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Processos
+                        </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" href="cadastro_modelo.html">Novo Modelo</a></li>
-                            <li><a class="dropdown-item" href="nova_instancia.html">Iniciar Processo</a></li>
+                            <li><a class="dropdown-item" href="/modelo/processo">Novo Modelo</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/processo/dashboard"><strong>Iniciar Processo</strong></a></li>
                         </ul>
                     </li>
-                    <li class="nav-item ms-lg-3">
-                        <button class="btn-theme-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></button>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Relatórios</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <button class="btn-theme-toggle" id="darkModeToggle" title="Alternar Tema">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -159,9 +229,12 @@
     </nav>
 
     <div class="container main-container">
-        <div class="mb-4">
-            <h2 class="fw-bold mb-0" style="color: var(--primary-color)">Gestão de Cargos</h2>
-            <p class="text-muted">Cadastre e visualize as funções do sistema</p>
+        
+        <div class="row mb-4 align-items-end">
+            <div class="col-md-8">
+                <h2 class="fw-bold mb-1" style="color: var(--primary-color)">Gestão de Cargos</h2>
+                <p class="text-muted mb-0">Cadastre, edite e visualize as funções hierárquicas do sistema.</p>
+            </div>
         </div>
 
         <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
@@ -172,28 +245,37 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-lista-tab" data-bs-toggle="pill" data-bs-target="#pills-lista" type="button" role="tab">
-                    <i class="fa-solid fa-list me-2"></i>Todos os Cargos
+                    <i class="fa-solid fa-list-ul me-2"></i>Todos os Cargos
                 </button>
             </li>
         </ul>
 
-        <div class="card p-4">
+        <div class="card p-4 p-lg-5">
             <div class="tab-content" id="pills-tabContent">
                 
                 <div class="tab-pane fade show active" id="pills-cadastro" role="tabpanel">
                     <div id="alertBox" class="alert d-none" role="alert"></div>
                     
                     <form id="formCargo">
-                        <div class="mb-4">
-                            <label for="nome_cargo" class="form-label">Nome do Cargo <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nome_cargo" placeholder="Ex: Analista Administrativo" required>
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label for="nome_cargo" class="form-label">Nome do Cargo <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--border-color); color: var(--text-color);">
+                                        <i class="fa-solid fa-id-badge"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0 ps-0" id="nome_cargo" placeholder="Ex: Analista Administrativo" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label for="descricao" class="form-label">Descrição da Função</label>
+                                <textarea class="form-control" id="descricao" rows="4" placeholder="Descreva brevemente as responsabilidades e atribuições deste cargo..."></textarea>
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="descricao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao" rows="3" placeholder="Descrição das responsabilidades..."></textarea>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary-custom px-4">
+
+                        <div class="d-flex justify-content-end mt-2">
+                            <button type="submit" class="btn btn-primary-custom px-5">
                                 <i class="fa-solid fa-save me-2"></i> Salvar Cargo
                             </button>
                         </div>
@@ -205,19 +287,21 @@
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="width: 50px;">ID</th>
+                                    <th scope="col" style="width: 80px;">ID</th>
                                     <th scope="col">Nome do Cargo</th>
                                     <th scope="col">Descrição</th>
-                                    <th scope="col" class="text-end">Ações</th>
+                                    <th scope="col" class="text-end" style="min-width: 100px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaCargosBody">
                                 </tbody>
                         </table>
                     </div>
+                    
                     <div id="emptyState" class="text-center py-5 d-none">
-                        <i class="fa-regular fa-folder-open fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Nenhum cargo encontrado.</p>
+                        <i class="fa-regular fa-folder-open fa-3x text-muted mb-3 opacity-50"></i>
+                        <h5 class="text-muted">Nenhum cargo encontrado</h5>
+                        <p class="text-muted small">Cadastre um novo cargo na aba anterior.</p>
                     </div>
                 </div>
 
@@ -228,131 +312,141 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // =========================================
-        // 1. LÓGICA DE DARK MODE
-        // =========================================
-        const toggleButton = document.getElementById('darkModeToggle');
-        const body = document.body;
-        const icon = toggleButton.querySelector('i');
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // =========================================
+            // 1. LÓGICA DE DARK MODE (GLOBAL)
+            // =========================================
+            const toggleButton = document.getElementById('darkModeToggle');
+            const icon = toggleButton.querySelector('i');
+            const body = document.body;
 
-        if (localStorage.getItem('theme') === 'dark') {
-            body.setAttribute('data-theme', 'dark');
-            icon.classList.replace('fa-moon', 'fa-sun');
-        }
-
-        toggleButton.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                icon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('theme', 'light');
-            } else {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
                 body.setAttribute('data-theme', 'dark');
-                icon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
             }
-        });
 
-        // =========================================
-        // 2. CADASTRO DE CARGO (POST)
-        // =========================================
-        document.getElementById('formCargo').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const btn = this.querySelector('button[type="submit"]');
+            toggleButton.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                if (currentTheme === 'dark') {
+                    body.removeAttribute('data-theme');
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // =========================================
+            // 2. CADASTRO DE CARGO (POST)
+            // =========================================
+            const formCargo = document.getElementById('formCargo');
             const alertBox = document.getElementById('alertBox');
-            
-            // CONSTRUÇÃO DO JSON CONFORME SOLICITADO
-            const payload = {
-                name: document.getElementById('nome_cargo').value,       // Chave: name
-                description: document.getElementById('descricao').value  // Chave: description
-            };
 
-            try {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Salvando...';
+            if(formCargo) {
+                formCargo.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const btn = this.querySelector('button[type="submit"]');
+                    
+                    const payload = {
+                        name: document.getElementById('nome_cargo').value,
+                        description: document.getElementById('descricao').value
+                    };
 
-                // ROTA ESPECIFICADA
-                const response = await fetch('/cargo/create', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    try {
+                        btn.disabled = true;
+                        const originalBtnContent = btn.innerHTML;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Salvando...';
+
+                        const response = await fetch('/cargo/create', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok || result.sucess) {
+                            alertBox.className = 'alert alert-success fade show';
+                            alertBox.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i> ' + (result.message || 'Cargo cadastrado com sucesso!');
+                            alertBox.classList.remove('d-none');
+                            this.reset();
+                            
+                            // Atualiza a lista e volta o botão após delay
+                            carregarListaCargos();
+                            setTimeout(() => { alertBox.classList.add('d-none'); }, 5000);
+                        } else {
+                            throw new Error(result.message || 'Erro ao cadastrar.');
+                        }
+                    } catch (error) {
+                        alertBox.className = 'alert alert-danger fade show';
+                        alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation me-2"></i> ' + error.message;
+                        alertBox.classList.remove('d-none');
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-save me-2"></i> Salvar Cargo';
+                    }
                 });
-
-                const result = await response.json();
-
-                if (response.ok || result.sucess) {
-                    // Sucesso
-                    alertBox.className = 'alert alert-success';
-                    alertBox.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i> ' + (result.message || 'Cargo cadastrado com sucesso!');
-                    alertBox.classList.remove('d-none');
-                    this.reset();
-                    
-                    // Atualiza a lista na outra aba automaticamente
-                    carregarListaCargos();
-                } else {
-                    throw new Error(result.message || 'Erro ao cadastrar.');
-                }
-            } catch (error) {
-                // Erro
-                alertBox.className = 'alert alert-danger';
-                alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation me-2"></i> ' + error.message;
-                alertBox.classList.remove('d-none');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-save me-2"></i> Salvar Cargo';
             }
+
+            // =========================================
+            // 3. LISTAGEM DE CARGOS (GET)
+            // =========================================
+            async function carregarListaCargos() {
+                const tbody = document.getElementById('tabelaCargosBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                if(!tbody) return;
+
+                tbody.innerHTML = ''; // Limpa tabela
+
+                try {
+                    const response = await fetch('/cargo/all');
+                    const result = await response.json();
+
+                    if (result.sucess && result.cargos) {
+                        const dados = result.cargos;
+
+                        if (dados.length === 0) {
+                            emptyState.classList.remove('d-none');
+                            return;
+                        } 
+                        
+                        emptyState.classList.add('d-none');
+
+                        dados.forEach(cargo => {
+                            // Adaptação para garantir leitura de "nome_cargo" ou "name" dependendo do seu backend
+                            const nome = cargo.nome_cargo || cargo.name || 'Sem Nome';
+                            const desc = cargo.descricao || cargo.description || '-';
+
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="fw-bold text-muted">#${cargo.id}</td>
+                                <td class="fw-500">${nome}</td> 
+                                <td class="text-muted"><small>${desc}</small></td>
+                                <td class="text-end">
+                                    <button class="btn-action btn-edit me-1" title="Editar ID ${cargo.id}"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn-action btn-delete" title="Excluir ID ${cargo.id}"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição GET:', error);
+                }
+            }
+
+            // Inicializar a lista
+            carregarListaCargos();
         });
-
-        // =========================================
-        // 3. LISTAGEM DE CARGOS (GET)
-        // =========================================
-        async function carregarListaCargos() {
-            const tbody = document.getElementById('tabelaCargosBody');
-            const emptyState = document.getElementById('emptyState');
-            
-            // Limpa tabela antes de carregar
-            tbody.innerHTML = '';
-
-            try {
-                const response = await fetch('/cargo/all'); // Rota GET
-                const result = await response.json();
-
-                if (result.sucess) {
-                    const dados = result.cargos;
-
-                    if (dados.length === 0) {
-                        emptyState.classList.remove('d-none');
-                        return;
-                    } 
-                    
-                    emptyState.classList.add('d-none');
-
-                    dados.forEach(cargo => {
-                        // Importante: No GET, as chaves geralmente vêm do Model do Python (ex: nome_cargo)
-                        // Se o seu Python retorna "nome_cargo", use cargo.nome_cargo.
-                        // Se retornar "name", use cargo.name. Vou assumir o padrão do banco (nome_cargo).
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td class="fw-bold">#${cargo.id}</td>
-                            <td>${cargo.nome_cargo}</td> 
-                            <td><span class="text-truncate-custom" title="${cargo.descricao || ''}">${cargo.descricao || '-'}</span></td>
-                            <td class="text-end">
-                                <button class="btn-action btn-edit me-1" title="Editar"><i class="fa-solid fa-pen"></i></button>
-                                <button class="btn-action btn-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                } else {
-                    console.error('Erro ao buscar cargos:', result.message);
-                }
-            } catch (error) {
-                console.error('Erro na requisição GET:', error);
-            }
-        }
-
-        // Carrega a lista assim que a página abre
-        document.addEventListener('DOMContentLoaded', carregarListaCargos);
     </script>
 </body>
 </html>

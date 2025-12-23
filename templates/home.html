@@ -248,7 +248,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <i class="fa-solid fa-scale-balanced me-2"></i>
                 Sec. Mulher PE
             </a>
@@ -260,7 +260,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link active" href="/">Home</a>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -268,8 +268,8 @@
                             Administração
                         </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" href="cadastro_cargo.html">Novo Cargo</a></li>
-                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Novo Funcionário</a></li>
+                            <li><a class="dropdown-item" href="/cargo/">Novo Cargo</a></li>
+                            <li><a class="dropdown-item" href="/funcionario/">Novo Funcionário</a></li>
                         </ul>
                     </li>
 
@@ -278,10 +278,9 @@
                             Processos
                         </a>
                         <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" href="cadastro_modelo.html">Novo Modelo</a></li>
-                            <li><a class="dropdown-item" href="cadastro_etapa.html">Definir Etapas</a></li>
+                            <li><a class="dropdown-item" href="/modelo/processo">Novo Modelo</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="nova_instancia.html"><strong>Iniciar Processo</strong></a></li>
+                            <li><a class="dropdown-item" href="/processo/dashboard"><strong>Iniciar Processo</strong></a></li>
                         </ul>
                     </li>
 
@@ -316,7 +315,7 @@
                     </p>
                     
                     <div class="d-flex justify-content-center gap-3 animate-up delay-2">
-                        <a href="nova_instancia.html" class="btn btn-light btn-lg px-4 fw-bold shadow-sm" style="color: var(--primary-color)">
+                        <a href="/processo/dashboard" class="btn btn-light btn-lg px-4 fw-bold shadow-sm" style="color: var(--primary-color)">
                             <i class="fa-solid fa-plus me-2"></i> Novo Processo
                         </a>
                         <a href="#atalhos" class="btn btn-outline-light btn-lg px-4 fw-bold">
@@ -352,7 +351,7 @@
                             </div>
                             <h5 class="card-title">Equipe & Cargos</h5>
                             <p class="card-text">Gerencie o cadastro de novos servidores, atribuições e hierarquia de cargos.</p>
-                            <a href="cadastro_funcionario.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Gerenciar</a>
+                            <a href="/funcionario/" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Gerenciar</a>
                         </div>
                     </div>
                 </div>
@@ -365,7 +364,7 @@
                             </div>
                             <h5 class="card-title">Modelos de Processo</h5>
                             <p class="card-text">Crie fluxos de trabalho, defina etapas sequenciais e regras de negócio.</p>
-                            <a href="cadastro_modelo.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Configurar</a>
+                            <a href="/modelo/processo" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Configurar</a>
                         </div>
                     </div>
                 </div>
@@ -378,7 +377,7 @@
                             </div>
                             <h5 class="card-title">Execução & Tarefas</h5>
                             <p class="card-text">Acompanhe instâncias abertas, realize tarefas pendentes e anexe documentos.</p>
-                            <a href="tarefas.html" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Acessar</a>
+                            <a href="/processo/dashboard" class="btn btn-outline-secondary w-100 mt-3 rounded-pill">Acessar</a>
                         </div>
                     </div>
                 </div>

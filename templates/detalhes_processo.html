@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Processo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f9; }
+        .timeline { position: relative; padding-left: 3rem; margin-top: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0;
+            width: 2px; background: #dee2e6;
+        }
+        .timeline-item { position: relative; margin-bottom: 2rem; }
+        .timeline-icon {
+            position: absolute; left: -3rem; width: 40px; height: 40px;
+            border-radius: 50%; text-align: center; line-height: 40px;
+            font-size: 1.2rem; border: 4px solid #f4f6f9; z-index: 1;
+        }
+        .bg-pending { background-color: #fff; border: 2px solid #0d6efd; color: #0d6efd; }
+        .bg-done { background-color: #198754; color: #fff; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-primary" href="/processo/dashboard">
+            <i class="bi bi-arrow-left-circle me-2"></i> Voltar ao Dashboard
+        </a>
+        <span class="text-muted" id="userDisplay">Carregando usuário...</span>
+    </div>
+</nav>
+
+<div class="container mt-4" style="max-width: 900px;">
+    
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="fw-bold mb-0" id="procNome">Carregando...</h4>
+                    <small class="text-muted" id="procData">...</small>
+                </div>
+                <span class="badge bg-secondary fs-6" id="procStatus">Status</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="acaoContainer" class="card shadow border-primary mb-5 d-none">
+        <div class="card-header bg-primary text-white fw-bold">
+            <i class="bi bi-pencil-square me-2"></i> Executar Tarefa
+        </div>
+        <div class="card-body bg-light">
+            <h5 class="card-title fw-bold text-dark" id="acaoTitulo">...</h5>
+            <p class="card-text text-secondary" id="acaoDescricao">...</p>
+            
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Despacho / Parecer:</label>
+                <textarea class="form-control" id="textoSaida" rows="3" placeholder="Digite o resultado da tarefa..."></textarea>
+            </div>
+            
+            <input type="hidden" id="idTarefaExecucao">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-success px-4" onclick="concluirTarefa()">
+                    <i class="bi bi-check-lg me-2"></i> Concluir e Avançar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="text-secondary border-bottom pb-2">Histórico de Eventos</h5>
+    <div id="timelineContainer" class="timeline">
+        </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 1. Pega ID da Instância da URL
+    const pathParts = window.location.pathname.split('/');
+    const idInstancia = pathParts[pathParts.length - 1]; // Ex: 5
+    
+    // 2. Pega ID do Usuário da Query String (simulação)
+    const urlParams = new URLSearchParams(window.location.search);
+    const idUsuarioLogado = urlParams.get('uid') || 1;
+
+    // Atualiza display
+    document.getElementById('userDisplay').innerText = `Simulando Usuário ID: ${idUsuarioLogado}`;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        carregarTimeline();
+    });
+
+    async function carregarTimeline() {
+        try {
+            // Passa o UID na URL para o backend decidir permissões
+            const res = await fetch(`/processo/api/instancia/${idInstancia}/timeline?uid=${idUsuarioLogado}`);
+            const data = await res.json();
+
+            if (!data.sucess) {
+                alert("Erro: " + data.message);
+                return;
+            }
+
+            // Preenche Cabeçalho
+            const inst = data.instancia;
+            document.getElementById('procNome').innerText = `#${inst.id} - ${inst.nome_processo}`;
+            document.getElementById('procData').innerText = `Iniciado em: ${inst.data_inicio}`;
+            
+            const badge = document.getElementById('procStatus');
+            if(inst.status_geral === 1) {
+                badge.className = 'badge bg-success fs-6';
+                badge.innerText = 'Concluído';
+            } else {
+                badge.className = 'badge bg-warning text-dark fs-6';
+                badge.innerText = 'Em Andamento';
+            }
+
+            // Preenche Timeline
+            const container = document.getElementById('timelineContainer');
+            const actionBox = document.getElementById('acaoContainer');
+            
+            container.innerHTML = '';
+            actionBox.classList.add('d-none'); // Esconde por padrão
+
+            data.timeline.forEach(item => {
+                let html = '';
+
+                // Verifica se é tarefa concluída ou pendente
+                if (item.status === 1) {
+                    // CONCLUÍDA
+                    html = `
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-done"><i class="bi bi-check-lg"></i></div>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-success">${item.nome_tarefa}</h6>
+                                    <div class="d-flex justify-content-between text-muted small mb-2">
+                                        <span><i class="bi bi-person"></i> ${item.responsavel_nome}</span>
+                                        <span><i class="bi bi-calendar"></i> ${item.data_conclusao}</span>
+                                    </div>
+                                    <div class="bg-light p-2 rounded border-start border-4 border-success text-secondary fst-italic">
+                                        "${item.texto_saida || 'Ok'}"
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // PENDENTE
+                    html = `
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-pending"><i class="bi bi-hourglass-split"></i></div>
+                            <div class="card border-primary bg-primary bg-opacity-10">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-primary mb-1">${item.nome_tarefa}</h6>
+                                    <p class="small mb-0 text-dark">Aguardando cargo: <strong>${item.nome_cargo_etapa}</strong></p>
+                                    <p class="small text-muted fst-italic mt-1">${item.descricao || ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // LÓGICA DE AÇÃO: O Service já disse se "pode_executar"
+                    if (item.pode_executar) {
+                        actionBox.classList.remove('d-none');
+                        document.getElementById('acaoTitulo').innerText = item.nome_tarefa;
+                        document.getElementById('acaoDescricao').innerText = item.descricao;
+                        document.getElementById('idTarefaExecucao').value = item.id_tarefa;
+                        // Scroll suave até a caixa de ação
+                        setTimeout(() => actionBox.scrollIntoView({ behavior: 'smooth' }), 500);
+                    }
+                }
+                container.innerHTML += html;
+            });
+
+        } catch (e) {
+            console.error(e);
+            alert("Erro de conexão ao carregar timeline.");
+        }
+    }
+
+    async function concluirTarefa() {
+        const idTarefa = document.getElementById('idTarefaExecucao').value;
+        const texto = document.getElementById('textoSaida').value;
+        const btn = document.querySelector('#acaoContainer button');
+
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Salvando...';
+
+        try {
+            const res = await fetch('/processo/api/concluir-tarefa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_tarefa: idTarefa,
+                    id_usuario: idUsuarioLogado,
+                    texto_saida: texto
+                })
+            });
+            const result = await res.json();
+
+            if (result.sucess) {
+                // Recarrega a página
+                window.location.reload();
+            } else {
+                alert("Erro: " + result.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        } catch (e) {
+            alert("Erro ao salvar.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
