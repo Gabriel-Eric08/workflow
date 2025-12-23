@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request   
+from flask import Blueprint, jsonify, request, render_template
 from services.cargo_service import CargoService
 
 cargo_service = CargoService()
@@ -50,3 +50,7 @@ def get_all():
             "sucess": False,
             "message": "Internal server error"
         }), 500
+
+@cargo_bp.route('/')
+def cargo_page():
+    return render_template('cadastro_cargo.html')
