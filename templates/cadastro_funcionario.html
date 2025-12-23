@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Funcionários | Secretaria da Mulher PE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS REUTILIZADO (Mesmo do Cargo) */
+        :root {
+            --primary-color: #6f42c1;
+            --primary-hover: #59359a;
+            --bg-body: #f8f9fa;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --navbar-text: #333;
+            --input-bg: #ffffff;
+            --border-color: #dee2e6;
+            --table-hover: #f1f1f1;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #9d6ce0;
+            --primary-hover: #b589f0;
+            --bg-body: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --navbar-bg: rgba(30, 30, 30, 0.95);
+            --navbar-text: #f8f9fa;
+            --input-bg: #2d2d2d;
+            --border-color: #444;
+            --table-hover: #2c2c2c;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-color); transition: 0.3s; padding-top: 80px; }
+        .navbar { background-color: var(--navbar-bg); backdrop-filter: blur(10px); padding: 15px 0; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .navbar-brand { color: var(--primary-color) !important; font-weight: 700; }
+        .nav-link { color: var(--navbar-text) !important; font-weight: 500; }
+        .btn-theme-toggle { border: 1px solid var(--navbar-text); color: var(--navbar-text); width: 40px; height: 40px; border-radius: 50%; background: transparent; }
+
+        .main-container { max-width: 1000px; margin: 40px auto; } /* Container um pouco maior */
+        .card { background-color: var(--card-bg); border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        .nav-pills .nav-link { color: var(--text-color); font-weight: 600; border-radius: 50px; padding: 10px 25px; margin-right: 10px; }
+        .nav-pills .nav-link.active { background-color: var(--primary-color); color: white; }
+
+        .table { color: var(--text-color); }
+        .table thead th { background: transparent; border-bottom: 2px solid var(--border-color); color: var(--primary-color); }
+        .table td, .table th { border-color: var(--border-color); vertical-align: middle; }
+        .table-hover tbody tr:hover { background-color: var(--table-hover); color: var(--text-color); }
+
+        .form-control { background-color: var(--input-bg); border-color: var(--border-color); color: var(--text-color); border-radius: 10px; padding: 12px; }
+        .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25); color: var(--text-color); background-color: var(--input-bg); }
+        .btn-primary-custom { background-color: var(--primary-color); color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; transition: 0.3s; }
+        .btn-primary-custom:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+        .btn-action { width: 35px; height: 35px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: none; }
+        .btn-edit { background-color: rgba(255, 193, 7, 0.15); color: #ffc107; }
+        .btn-edit:hover { background-color: #ffc107; color: #000; }
+        .btn-delete { background-color: rgba(220, 53, 69, 0.15); color: #dc3545; }
+        .btn-delete:hover { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-scale-balanced me-2"></i> Sec. Mulher PE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon" style="filter: invert(0.5);"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Administração</a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="cadastro_cargo.html">Gerenciar Cargos</a></li>
+                            <li><a class="dropdown-item" href="cadastro_funcionario.html">Gerenciar Funcionários</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3"><button class="btn-theme-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-0" style="color: var(--primary-color)">Gestão de Funcionários</h2>
+                <p class="text-muted mb-0">Cadastre e gerencie a equipe</p>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-cadastro-tab" data-bs-toggle="pill" data-bs-target="#pills-cadastro" type="button" role="tab"><i class="fa-solid fa-user-plus me-2"></i>Novo Cadastro</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-lista-tab" data-bs-toggle="pill" data-bs-target="#pills-lista" type="button" role="tab"><i class="fa-solid fa-users me-2"></i>Ver Equipe</button>
+            </li>
+        </ul>
+
+        <div class="card p-4">
+            <div class="tab-content" id="pills-tabContent">
+                
+                <div class="tab-pane fade show active" id="pills-cadastro" role="tabpanel">
+                    <div id="alertBox" class="alert d-none" role="alert"></div>
+                    <form id="formFuncionario">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Maria da Silva" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="email@gov.pe.br" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="senha_hash" class="form-label">Senha Inicial <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="senha_hash" name="senha_hash" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_cargo" class="form-label">ID Cargo <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="id_cargo" name="id_cargo" placeholder="Ex: 1" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button type="submit" class="btn btn-primary-custom px-4"><i class="fa-solid fa-save me-2"></i> Salvar Funcionário</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pills-lista" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Cargo (ID)</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaFuncBody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- 1. Dark Mode ---
+        const toggleButton = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const icon = toggleButton.querySelector('i');
+        if (localStorage.getItem('theme') === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+        toggleButton.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // --- 2. Enviar Formulário ---
+        document.getElementById('formFuncionario').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const alertBox = document.getElementById('alertBox');
+            
+            const data = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                senha_hash: document.getElementById('senha_hash').value,
+                id_cargo: parseInt(document.getElementById('id_cargo').value)
+            };
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Salvando...';
+                
+                const response = await fetch('/funcionario/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (response.ok || result.sucess) {
+                    alertBox.className = 'alert alert-success';
+                    alertBox.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i> Funcionário cadastrado!';
+                    alertBox.classList.remove('d-none');
+                    this.reset();
+                    carregarListaFunc(); // Atualiza lista (Mock)
+                } else {
+                    throw new Error(result.message || 'Erro ao cadastrar');
+                }
+            } catch (error) {
+                alertBox.className = 'alert alert-danger';
+                alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation me-2"></i> ' + error.message;
+                alertBox.classList.remove('d-none');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-save me-2"></i> Salvar Funcionário';
+            }
+        });
+
+        // --- 3. Mock Data Funcionários ---
+        const mockFuncionarios = [
+            { id: 1, nome: 'Ana Souza', email: 'ana.souza@secmulher.pe.gov.br', cargo_id: 1, ativo: true },
+            { id: 2, nome: 'Carlos Pereira', email: 'carlos.pereira@secmulher.pe.gov.br', cargo_id: 2, ativo: true },
+            { id: 3, nome: 'Mariana Lima', email: 'mariana.lima@secmulher.pe.gov.br', cargo_id: 2, ativo: false },
+        ];
+
+        function carregarListaFunc() {
+            const tbody = document.getElementById('tabelaFuncBody');
+            tbody.innerHTML = '';
+
+            // Dados Fictícios
+            const dados = mockFuncionarios;
+
+            dados.forEach(func => {
+                const statusBadge = func.ativo 
+                    ? '<span class="badge bg-success bg-opacity-10 text-success">Ativo</span>'
+                    : '<span class="badge bg-secondary bg-opacity-10 text-secondary">Inativo</span>';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold">${func.nome}</td>
+                    <td>${func.email}</td>
+                    <td><span class="badge bg-light text-dark border">ID ${func.cargo_id}</span></td>
+                    <td>${statusBadge}</td>
+                    <td class="text-end">
+                        <button class="btn-action btn-edit me-1"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', carregarListaFunc);
+    </script>
+</body>
+</html>
