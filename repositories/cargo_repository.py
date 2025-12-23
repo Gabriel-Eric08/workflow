@@ -13,3 +13,6 @@ class CargoRepository:
         except Exception as e:
             print(f"Repository error: {e}")
             return False
+    def get_all(self):
+        cargos = Cargo.query.all()
+        return cargos

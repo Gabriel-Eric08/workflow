@@ -11,6 +11,13 @@ class Cargo(db.Model):
     # Relacionamento: Um cargo tem vários funcionários
     funcionarios = db.relationship('Funcionario', backref='cargo', lazy=True)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome_cargo": self.nome_cargo,
+            "descricao": self.descricao
+        }
+
     def __repr__(self):
         return f'<Cargo {self.nome_cargo}>'
 

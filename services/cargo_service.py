@@ -12,3 +12,6 @@ class CargoService:
             db.session.commit()
             return True
         return False
+    def get_all(self):
+        cargos = self.repo.get_all()
+        return cargos

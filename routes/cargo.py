@@ -29,3 +29,24 @@ def create_cargo():
         "sucess":False,
         "message":"Internal error"
     }), 500
+
+@cargo_bp.route('/all', methods=['GET'])
+def get_all():
+    try:
+        cargos = cargo_service.get_all()
+        
+        # Converte cada objeto Cargo para dicionário
+        cargos_list = [cargo.to_dict() for cargo in cargos]
+        
+        return jsonify({
+            "sucess": True,
+            "cargos": cargos_list
+        }), 200
+        
+    except Exception as e:
+        # Só retorna 500 se realmente der um erro de servidor (exceção)
+        print(f"Erro na rota: {e}")
+        return jsonify({
+            "sucess": False,
+            "message": "Internal server error"
+        }), 500
