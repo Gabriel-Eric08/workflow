@@ -109,13 +109,16 @@ class InstanciaProcesso(db.Model):
     id_modelo = db.Column(db.Integer, db.ForeignKey('modelos_processos.id'), nullable=False)
     id_criador = db.Column(db.Integer, db.ForeignKey('funcionarios.id'))
     
-    # Novo campo que adicionamos (MANTENHA ISSO)
-    nome_processo = db.Column(db.String(255)) 
+    # Colunas atualizadas
+    titulo = db.Column(db.String(255), nullable=False) 
+    prazo = db.Column(db.DateTime, nullable=True)
+    prioridade = db.Column(db.Integer, default=2) 
     
     data_inicio = db.Column(db.DateTime, default=datetime.utcnow)
     status_geral = db.Column(db.Integer, default=0) 
 
     criador = db.relationship('Funcionario')
+    modelo = db.relationship('ModeloProcesso') # Útil para acessar nome do modelo pai
     tarefas = db.relationship('TarefaExecucao', backref='instancia', lazy=True)
 
 
